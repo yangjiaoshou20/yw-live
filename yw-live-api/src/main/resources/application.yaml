@@ -1,0 +1,12 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: yw-live-api
+  cloud:
+    nacos:
+      username: nacos
+      password: www.yyj.com
+      discovery:
+        namespace: b7e7f031-ad7b-4a1f-98a7-a315bd105b26
+        server-addr: 192.168.211.132:8848
