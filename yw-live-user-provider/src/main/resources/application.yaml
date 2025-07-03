@@ -1,3 +1,6 @@
 spring:
   application:
     name: yw-live-user-provider
+  datasource:
+    driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
+    url: jdbc:shardingsphere:classpath:sharding.yaml

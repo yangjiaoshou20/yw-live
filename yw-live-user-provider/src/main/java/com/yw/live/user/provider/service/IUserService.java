@@ -1,10 +1,10 @@
-package com.yw.live.user.interfaces;
+package com.yw.live.user.provider.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.yw.live.user.dto.UserDTO;
+import com.yw.live.user.provider.dao.po.UserPO;
 
-public interface IUserRpc {
-
-    void sayHello(String name);
+public interface IUserService extends IService<UserPO> {
 
     /**
      * 根据用户id进行查询
@@ -20,4 +20,5 @@ public interface IUserRpc {
      * 插入用户
      */
     boolean insertOne(UserDTO userDTO);
+
 }
