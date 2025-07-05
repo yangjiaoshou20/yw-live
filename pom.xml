@@ -22,6 +22,7 @@
         <module>yw-live-user-provider</module>
         <module>yw-live-api</module>
         <module>yw-live-common-interface</module>
+        <module>yw-live-framework</module>
     </modules>
 
     <properties>

@@ -1,4 +1,4 @@
-package com.yw.live.user.provider.config;
+package com.yw.live.framework.datasource.starter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
