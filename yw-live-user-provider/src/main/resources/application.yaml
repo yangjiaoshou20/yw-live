@@ -10,7 +10,22 @@ spring:
       maximum-pool-size: 20
       connection-timeout: 3000
       max-lifetime: 60000
-
+  data:
+    redis:
+      cluster:
+        max-redirects: 3 # 最大重定向次数（默认5，建议3-5）
+        nodes:
+          - 192.168.211.132:6381
+          - 192.168.211.132:6382
+          - 192.168.211.132:6383
+          - 192.168.211.132:6384
+          - 192.168.211.132:6385
+          - 192.168.211.132:6386
+      lettuce:
+        pool:
+          min-idle: 2   #最小空闲连接
+          max-active: 16  #最大连接
+          max-idle: 32   #最大空闲连接
 dubbo:
   application:
     name: ${spring.application.name}
@@ -19,3 +34,7 @@ dubbo:
   protocol:
     name: dubbo
     port: 9091
+  consumer:
+    timeout: 10000
+  provider:
+    timeout: 30000
