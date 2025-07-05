@@ -6,6 +6,7 @@ import com.yw.live.user.dto.UserDTO;
 import com.yw.live.user.provider.dao.mapper.IUserMapper;
 import com.yw.live.user.provider.dao.po.UserPO;
 import com.yw.live.user.provider.service.IUserService;
+import com.yw.live.user.provider.utis.UserProviderCacheKeyBuilder;
 import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -18,16 +19,19 @@ public class UserServiceImpl extends ServiceImpl<IUserMapper, UserPO> implements
     @Resource
     private RedisTemplate<String,UserDTO> redisTemplate;
 
+    @Resource
+    private UserProviderCacheKeyBuilder userProviderCacheKeyBuilder;
+
     @Override
     public UserDTO getUserById(Long userId) {
         if (userId == null) {
             return null;
         }
-        return Optional.ofNullable(redisTemplate.opsForValue().get(String.valueOf(userId)))
+        return Optional.ofNullable(redisTemplate.opsForValue().get(userProviderCacheKeyBuilder.buildUserInfoKey(userId)))
                 .orElseGet(() -> {
                     UserDTO userDTO = BeanUtil.copyProperties(baseMapper.selectById(userId), UserDTO.class);
                     if (userDTO != null) {
-                        redisTemplate.opsForValue().set(String.valueOf(userId), userDTO);
+                        redisTemplate.opsForValue().set(String.valueOf(userProviderCacheKeyBuilder.buildUserInfoKey(userId)), userDTO);
                     }
                     return userDTO;
                 });
