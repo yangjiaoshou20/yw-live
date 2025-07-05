@@ -95,12 +95,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.yyj</groupId>
-            <artifactId>yw-live-user-interface</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <scope>provided</scope>

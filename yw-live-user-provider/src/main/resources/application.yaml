@@ -4,3 +4,9 @@ spring:
   datasource:
     driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
     url: jdbc:shardingsphere:classpath:sharding.yaml
+    hikari:
+      pool-name: yw-live-user-pool
+      minimum-idle: 2
+      maximum-pool-size: 20
+      connection-timeout: 3000
+      max-lifetime: 60000
