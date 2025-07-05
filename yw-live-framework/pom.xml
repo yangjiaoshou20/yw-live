@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>yw-live-framework-datasource-starter</module>
+        <module>yw-live-framework-redis-starter</module>
     </modules>
 
     <properties>
