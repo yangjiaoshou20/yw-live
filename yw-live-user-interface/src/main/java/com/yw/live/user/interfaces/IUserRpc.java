@@ -2,6 +2,8 @@ package com.yw.live.user.interfaces;
 
 import com.yw.live.user.dto.UserDTO;
 
+import java.util.List;
+
 public interface IUserRpc {
 
     void sayHello(String name);
@@ -20,4 +22,14 @@ public interface IUserRpc {
      * 插入用户
      */
     boolean insertOne(UserDTO userDTO);
+
+    /**
+     * 用户信息批量查询
+     */
+    List<UserDTO> findUserByUserIds(List<Long> userIds);
+
+    /**
+     * 清空用户表
+     */
+    int deleteAll();
 }

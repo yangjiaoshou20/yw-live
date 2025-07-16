@@ -2,13 +2,13 @@ dataSources:
   yw-live-user-master:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.211.132:16036/yw_live_user?useUnicode=true&characterEncoding=utf8
+    jdbcUrl: jdbc:mysql://192.168.211.132:16036/yw_live_user?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=utf8
     username: root
     password: www.yyj.com
   yw-live-user-slave-01:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.211.132:16037/yw_live_user?useUnicode=true&characterEncoding=utf8
+    jdbcUrl: jdbc:mysql://192.168.211.132:16037/yw_live_user?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=utf8
     username: root
     password: www.yyj.com
 rules:

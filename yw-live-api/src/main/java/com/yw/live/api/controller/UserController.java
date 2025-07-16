@@ -3,9 +3,9 @@ package com.yw.live.api.controller;
 import com.yw.live.user.dto.UserDTO;
 import com.yw.live.user.interfaces.IUserRpc;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -27,5 +27,15 @@ public class UserController {
     @GetMapping("/insertUserInfo")
     public boolean insertUserInfo(UserDTO userDTO) {
         return userRpc.insertOne(userDTO);
+    }
+
+    @PostMapping("/findUserByUserIds")
+    public List<UserDTO> findUserByUserIds(@RequestBody List<Long> userIds) {
+        return userRpc.findUserByUserIds(userIds);
+    }
+
+    @GetMapping("/deleteAll")
+    public int deleteAll() {
+        return userRpc.deleteAll();
     }
 }

@@ -6,6 +6,8 @@ import com.yw.live.user.provider.service.IUserService;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 
+import java.util.List;
+
 
 @DubboService
 public class UserRpcImpl implements IUserRpc {
@@ -31,5 +33,15 @@ public class UserRpcImpl implements IUserRpc {
     @Override
     public boolean insertOne(UserDTO userDTO) {
         return userService.insertOne(userDTO);
+    }
+
+    @Override
+    public List<UserDTO> findUserByUserIds(List<Long> userIds) {
+        return userService.findUserByUserIds(userIds);
+    }
+
+    @Override
+    public int deleteAll() {
+        return userService.deleteAll();
     }
 }

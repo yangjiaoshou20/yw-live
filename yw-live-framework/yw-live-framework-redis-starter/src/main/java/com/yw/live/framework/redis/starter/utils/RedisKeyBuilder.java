@@ -2,6 +2,8 @@ package com.yw.live.framework.redis.starter.utils;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class RedisKeyBuilder {
 
     @Value("${spring.application.name}")
@@ -21,7 +23,12 @@ public class RedisKeyBuilder {
         throw new RuntimeException("ModuleName is not declared!");
     }
 
-    public String buildUserInfoKey(Long userId) {
-        return this.getPrefix() + this.getModuleName() + this.getSplitItem() + userId;
+    public String buildUserInfoKey(Long id) {
+        return this.getPrefix() + this.getModuleName() + this.getSplitItem() + id;
+    }
+
+    // 生成随机过期时间，单位：秒
+    public long createRandomExpireTime() {
+        return ThreadLocalRandom.current().nextLong(10) * 60 + 30 * 60;
     }
 }
