@@ -36,6 +36,11 @@ public class UserRpcImpl implements IUserRpc {
     }
 
     @Override
+    public boolean batchInsert(List<UserDTO> userDTOList) {
+        return userService.batchInsert(userDTOList);
+    }
+
+    @Override
     public List<UserDTO> findUserByUserIds(List<Long> userIds) {
         return userService.findUserByUserIds(userIds);
     }

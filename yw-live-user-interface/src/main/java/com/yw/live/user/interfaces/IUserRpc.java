@@ -24,6 +24,11 @@ public interface IUserRpc {
     boolean insertOne(UserDTO userDTO);
 
     /**
+     * 批量插入用户
+     */
+    boolean batchInsert(List<UserDTO> userDTOList);
+
+    /**
      * 用户信息批量查询
      */
     List<UserDTO> findUserByUserIds(List<Long> userIds);
