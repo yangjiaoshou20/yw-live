@@ -12,7 +12,7 @@ public class ProducerExample {
 
         try {
             // 创建消息实例，指定 topic、Tag和消息体
-            Message msg = new Message("TestTopic", "TagA", ("Hello RocketMQ").getBytes());
+            Message msg = new Message("TestTopic-01", "TagA", ("Hello RocketMQ").getBytes());
             // 发送消息并获取发送结果
             for (int i = 0; i < 10; i++) {
                 SendResult sendResult = producer.send(msg);
