@@ -38,3 +38,12 @@ dubbo:
     timeout: 10000
   provider:
     timeout: 30000
+
+yw:
+  mq:
+    producer:
+      name-srv-addr: 192.168.211.132:9876
+      producer-group: yw_user_producer
+    consumer:
+      name-srv-addr: 192.168.211.132:9876
+      consumer-group: yw_user_consumer

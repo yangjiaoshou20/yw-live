@@ -1,15 +1,22 @@
 package com.yw.live.user.provider.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yw.live.user.dto.UserDTO;
 import com.yw.live.user.provider.dao.mapper.IUserMapper;
 import com.yw.live.user.provider.dao.po.UserPO;
+import com.yw.live.user.provider.enums.RocketMQTopicEnum;
 import com.yw.live.user.provider.service.IUserService;
 import com.yw.live.user.provider.utis.UserProviderCacheKeyBuilder;
 import jakarta.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.rocketmq.client.exception.MQBrokerException;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.MQProducer;
+import org.apache.rocketmq.common.message.Message;
+import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,6 +37,9 @@ public class UserServiceImpl extends ServiceImpl<IUserMapper, UserPO> implements
 
     @Resource
     private UserProviderCacheKeyBuilder userProviderCacheKeyBuilder;
+
+    @Resource
+    private MQProducer mqProducer;
 
     @Override
     public UserDTO getUserById(Long userId) {
@@ -52,6 +62,15 @@ public class UserServiceImpl extends ServiceImpl<IUserMapper, UserPO> implements
             return false;
         }
         baseMapper.updateById(BeanUtil.copyProperties(userDTO, UserPO.class));
+        redisTemplate.delete(userProviderCacheKeyBuilder.buildUserInfoKey(userDTO.getUserId()));
+        Message message = new Message(RocketMQTopicEnum.YW_UPDATE_USER_TOPIC.getTopicName(), JSONUtil.toJsonStr(userDTO).getBytes());
+        message.setDelayTimeLevel(2);
+        try {
+            mqProducer.send(message);
+        } catch (MQClientException | RemotingException | MQBrokerException | InterruptedException e) {
+            log.error("消息发送失败!", e);
+            throw new RuntimeException(e);
+        }
         return true;
     }
 
