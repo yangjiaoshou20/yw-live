@@ -30,7 +30,11 @@ dubbo:
   application:
     name: ${spring.application.name}
   registry:
-    address: nacos://192.168.211.132:8848/nacos?namespace=b7e7f031-ad7b-4a1f-98a7-a315bd105b26&&username=nacos&&password=www.yyj.com
+    address: nacos://192.168.211.132:8848
+    parameters:
+      username: nacos
+      password: www.yyj.com
+      namespace: b7e7f031-ad7b-4a1f-98a7-a315bd105b26
   protocol:
     name: dubbo
     port: 9091
