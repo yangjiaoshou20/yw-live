@@ -29,6 +29,7 @@ spring:
 dubbo:
   application:
     name: ${spring.application.name}
+    qos-enable: false
   registry:
     address: nacos://192.168.211.132:8848
     parameters:

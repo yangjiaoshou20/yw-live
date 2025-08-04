@@ -51,7 +51,7 @@ public class UserController {
             userDTO.setUpdateTime(new Date());
             userDTOList.add(userDTO);
         }
-        userRpc.batchInsert(userDTOList);
+        boolean insertResult = userRpc.batchInsert(userDTOList);
         return userDTOList.stream().map(UserDTO::getUserId).toList();
     }
 
