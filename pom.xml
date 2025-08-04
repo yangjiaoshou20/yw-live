@@ -23,13 +23,15 @@
         <module>yw-live-api</module>
         <module>yw-live-common-interface</module>
         <module>yw-live-framework</module>
+        <module>yw-live-id-generate-provider</module>
+        <module>yw-live-id-generate-interface</module>
     </modules>
 
     <properties>
         <yw-mysql.version>8.0.29</yw-mysql.version>
         <springboot.version>3.0.4</springboot.version>
         <curator.version>2.12.0</curator.version>
-        <mybatis-plus.version>3.5.3</mybatis-plus.version>
+        <mybatis-plus.version>3.5.12</mybatis-plus.version>
         <druid.version>1.1.20</druid.version>
         <sharding.jdbc.version>5.4.1</sharding.jdbc.version>
         <hessian.version>4.0.38</hessian.version>

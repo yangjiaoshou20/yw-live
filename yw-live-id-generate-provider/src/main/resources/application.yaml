@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: yw-live-id-generate
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.211.132:16036/yw_live_common?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=utf8
+    username: root
+    password: www.yyj.com
+
+mybatis-plus:
+  mapper-locations: classpath:com/yw/live/id/generate/provider/mapper/**.xml
+  type-aliases-package: com.yw.live.id.generate.provider.po
+  configuration:
+    # MyBatis 配置
+    map-underscore-to-camel-case: true
+
+dubbo:
+  application:
+    name: ${spring.application.name}
+    qos-enable: false
+  registry:
+    address: nacos://192.168.211.132:8848
+    parameters:
+      username: nacos
+      password: www.yyj.com
+      namespace: b7e7f031-ad7b-4a1f-98a7-a315bd105b26
+  protocol:
+    name: dubbo
+    port: 9093
+  consumer:
+    timeout: 10000
+  provider:
+    timeout: 30000
