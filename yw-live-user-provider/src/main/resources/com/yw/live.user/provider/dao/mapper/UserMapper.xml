@@ -10,7 +10,8 @@
             <if test="tag != null and tag > 0 and filedName != null">${filedName} = ${filedName} | #{tag}</if>
         </set>
         <where>
-            user_id = #{userId}
+            <if test="userId != null">user_id = #{userId}</if>
+            <if test="tag != null">and ${filedName} = ${filedName} &amp;~ #{tag}</if>
         </where>
     </update>
 
@@ -20,7 +21,8 @@
             <if test="tag != null and tag > 0 and filedName != null">${filedName} = ${filedName} &amp;~ #{tag}</if>
         </set>
         <where>
-            user_id = #{userId}
+            <if test="userId != null">user_id = #{userId}</if>
+            <if test="tag != null and filedName != null">and ${filedName} &amp; #{tag} = #{tag}</if>
         </where>
     </update>
 </mapper>
