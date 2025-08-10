@@ -52,3 +52,6 @@ yw:
     consumer:
       name-srv-addr: 192.168.211.132:9876
       consumer-group: yw_user_consumer
+
+mybatis-plus:
+  mapper-locations: classpath*:com/yw/live.user/**/*.xml
