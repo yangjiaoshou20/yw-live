@@ -51,7 +51,7 @@ public class RocketMQConsumer implements InitializingBean {
                     log.info("消费消息：{}", new String(msg.getBody()));
                     UserDTO userDTO = JSONUtil.toBean(new String(msg.getBody()), UserDTO.class);
                     if (Optional.ofNullable(userDTO).map(UserDTO::getUserId).orElse(0L) > 0) {
-                        redisTemplate.delete(userProviderCacheKeyBuilder.buildUserInfoKey(userDTO.getUserId()));
+                        redisTemplate.delete(userProviderCacheKeyBuilder.buildKey(userDTO.getUserId()));
                     }
                 }
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;

@@ -46,11 +46,11 @@ public class UserServiceImpl extends ServiceImpl<IUserMapper, UserPO> implements
         if (userId == null) {
             return null;
         }
-        return Optional.ofNullable(redisTemplate.opsForValue().get(userProviderCacheKeyBuilder.buildUserInfoKey(userId)))
+        return Optional.ofNullable(redisTemplate.opsForValue().get(userProviderCacheKeyBuilder.buildKey(userId)))
                 .orElseGet(() -> {
                     UserDTO userDTO = BeanUtil.copyProperties(baseMapper.selectById(userId), UserDTO.class);
                     if (userDTO != null) {
-                        redisTemplate.opsForValue().set(String.valueOf(userProviderCacheKeyBuilder.buildUserInfoKey(userId)), userDTO, userProviderCacheKeyBuilder.createRandomExpireTime(), TimeUnit.SECONDS);
+                        redisTemplate.opsForValue().set(String.valueOf(userProviderCacheKeyBuilder.buildKey(userId)), userDTO, userProviderCacheKeyBuilder.createRandomExpireTime(), TimeUnit.SECONDS);
                     }
                     return userDTO;
                 });
@@ -62,7 +62,7 @@ public class UserServiceImpl extends ServiceImpl<IUserMapper, UserPO> implements
             return false;
         }
         baseMapper.updateById(BeanUtil.copyProperties(userDTO, UserPO.class));
-        redisTemplate.delete(userProviderCacheKeyBuilder.buildUserInfoKey(userDTO.getUserId()));
+        redisTemplate.delete(userProviderCacheKeyBuilder.buildKey(userDTO.getUserId()));
         Message message = new Message(RocketMQTopicEnum.YW_UPDATE_USER_TOPIC.getTopicName(), JSONUtil.toJsonStr(userDTO).getBytes());
         message.setDelayTimeLevel(2);
         try {
@@ -97,7 +97,7 @@ public class UserServiceImpl extends ServiceImpl<IUserMapper, UserPO> implements
         }
 
         List<String> keys = userIds.stream()
-                .map(userProviderCacheKeyBuilder::buildUserInfoKey)
+                .map(userProviderCacheKeyBuilder::buildKey)
                 .toList();
 
         // 获取redis中的用户信息
@@ -121,7 +121,7 @@ public class UserServiceImpl extends ServiceImpl<IUserMapper, UserPO> implements
                 .forEach(ids -> dbUserPoList.addAll(baseMapper.selectBatchIds(ids)));
 
         Map<String, UserDTO> userPOMap = dbUserPoList.stream()
-                .collect(Collectors.toMap(userPO -> userProviderCacheKeyBuilder.buildUserInfoKey(userPO.getUserId()), userPO -> BeanUtil.copyProperties(userPO, UserDTO.class)));
+                .collect(Collectors.toMap(userPO -> userProviderCacheKeyBuilder.buildKey(userPO.getUserId()), userPO -> BeanUtil.copyProperties(userPO, UserDTO.class)));
 
         // 将未命中的用户信息放入redis缓存中
         if (!CollectionUtils.isEmpty(dbUserPoList)) {

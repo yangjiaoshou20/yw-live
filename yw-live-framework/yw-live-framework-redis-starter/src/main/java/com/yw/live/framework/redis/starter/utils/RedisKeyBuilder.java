@@ -23,7 +23,7 @@ public class RedisKeyBuilder {
         throw new RuntimeException("ModuleName is not declared!");
     }
 
-    public String buildUserInfoKey(Long id) {
+    public String buildKey(Long id) {
         return this.getPrefix() + this.getModuleName() + this.getSplitItem() + id;
     }
 
