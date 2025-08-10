@@ -8,4 +8,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface IUserTagMapper extends BaseMapper<UserTagPo> {
 
     int addUserTag(Long userId, Long tag, String filedName);
+
+    int deleteUserTag(Long userId, Long tag,String filedName);
 }

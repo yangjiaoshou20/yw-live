@@ -13,4 +13,14 @@
             user_id = #{userId}
         </where>
     </update>
+
+    <update id="deleteUserTag">
+        update <include refid="tableName"/>
+        <set>
+            <if test="tag != null and tag > 0 and filedName != null">${filedName} = ${filedName} &amp;~ #{tag}</if>
+        </set>
+        <where>
+            user_id = #{userId}
+        </where>
+    </update>
 </mapper>
