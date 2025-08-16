@@ -10,6 +10,7 @@ public class RedisKeyBuilder {
     private String applicationName;
 
     private static final String SPLIT_ITEM = ":";
+    public static final String DELAY_DELETE_KEY = "deleteKey";
 
     public String getSplitItem() {
         return SPLIT_ITEM;

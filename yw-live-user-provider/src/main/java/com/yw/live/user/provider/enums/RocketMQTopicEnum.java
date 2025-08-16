@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum RocketMQTopicEnum {
 
-    YW_UPDATE_USER_TOPIC("yw-update-user-topic", "更新用户延迟删除topic");
+    YW_USER_DELAY_DELETE_TOPIC("yw-user-delay-delete-topic", "用户模块延迟删除topic");
 
     private final String topicName;
     private final String description;

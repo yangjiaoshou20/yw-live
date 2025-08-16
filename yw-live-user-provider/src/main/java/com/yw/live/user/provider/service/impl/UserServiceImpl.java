@@ -1,9 +1,11 @@
 package com.yw.live.user.provider.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yw.live.framework.redis.starter.utils.RedisKeyBuilder;
 import com.yw.live.user.dto.UserDTO;
 import com.yw.live.user.provider.dao.mapper.IUserMapper;
 import com.yw.live.user.provider.dao.po.UserPO;
@@ -48,7 +50,11 @@ public class UserServiceImpl extends ServiceImpl<IUserMapper, UserPO> implements
         }
         return Optional.ofNullable(redisTemplate.opsForValue().get(userProviderCacheKeyBuilder.buildKey(userId)))
                 .orElseGet(() -> {
-                    UserDTO userDTO = BeanUtil.copyProperties(baseMapper.selectById(userId), UserDTO.class);
+                    UserPO userPO = baseMapper.selectById(userId);
+                    if (userPO == null) {
+                        return null;
+                    }
+                    UserDTO userDTO = BeanUtil.copyProperties(userPO, UserDTO.class);
                     if (userDTO != null) {
                         redisTemplate.opsForValue().set(String.valueOf(userProviderCacheKeyBuilder.buildKey(userId)), userDTO, userProviderCacheKeyBuilder.createRandomExpireTime(), TimeUnit.SECONDS);
                     }
@@ -63,7 +69,8 @@ public class UserServiceImpl extends ServiceImpl<IUserMapper, UserPO> implements
         }
         baseMapper.updateById(BeanUtil.copyProperties(userDTO, UserPO.class));
         redisTemplate.delete(userProviderCacheKeyBuilder.buildKey(userDTO.getUserId()));
-        Message message = new Message(RocketMQTopicEnum.YW_UPDATE_USER_TOPIC.getTopicName(), JSONUtil.toJsonStr(userDTO).getBytes());
+        JSONObject jsonObject = JSONUtil.createObj().set(RedisKeyBuilder.DELAY_DELETE_KEY, userProviderCacheKeyBuilder.buildKey(userDTO.getUserId()));
+        Message message = new Message(RocketMQTopicEnum.YW_USER_DELAY_DELETE_TOPIC.getTopicName(), JSONUtil.toJsonStr(jsonObject).getBytes());
         message.setDelayTimeLevel(2);
         try {
             mqProducer.send(message);

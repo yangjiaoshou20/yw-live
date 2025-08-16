@@ -1,10 +1,11 @@
 package com.yw.live.user.provider.config;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.yw.live.user.dto.UserDTO;
+import com.yw.live.framework.redis.starter.utils.RedisKeyBuilder;
 import com.yw.live.user.provider.config.props.RocketMQConsumerProperties;
 import com.yw.live.user.provider.enums.RocketMQTopicEnum;
-import com.yw.live.user.provider.utis.UserProviderCacheKeyBuilder;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
@@ -16,8 +17,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.Optional;
-
 @Configuration
 @Slf4j
 public class RocketMQConsumer implements InitializingBean {
@@ -27,9 +26,6 @@ public class RocketMQConsumer implements InitializingBean {
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
-
-    @Resource
-    private UserProviderCacheKeyBuilder userProviderCacheKeyBuilder;
 
     @Override
     public void afterPropertiesSet() {
@@ -44,14 +40,15 @@ public class RocketMQConsumer implements InitializingBean {
         consumer.setNamesrvAddr(consumerProperties.getNameSrvAddr());
         // 订阅指定的主题和标签（* 表示所有标签）
         try {
-            consumer.subscribe(RocketMQTopicEnum.YW_UPDATE_USER_TOPIC.getTopicName(), "*");
+            consumer.subscribe(RocketMQTopicEnum.YW_USER_DELAY_DELETE_TOPIC.getTopicName(), "*");
             // 注册消息监听器
             consumer.registerMessageListener((MessageListenerConcurrently) (messages, context) -> {
                 for (MessageExt msg : messages) {
                     log.info("消费消息：{}", new String(msg.getBody()));
-                    UserDTO userDTO = JSONUtil.toBean(new String(msg.getBody()), UserDTO.class);
-                    if (Optional.ofNullable(userDTO).map(UserDTO::getUserId).orElse(0L) > 0) {
-                        redisTemplate.delete(userProviderCacheKeyBuilder.buildKey(userDTO.getUserId()));
+                    JSONObject jsonObject = JSONUtil.parseObj(new String(msg.getBody()));
+                    String delayDeleteKey = jsonObject.getStr(RedisKeyBuilder.DELAY_DELETE_KEY);
+                    if (StrUtil.isNotBlank(delayDeleteKey)) {
+                        redisTemplate.delete(delayDeleteKey);
                     }
                 }
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;

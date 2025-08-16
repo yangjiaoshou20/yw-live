@@ -8,9 +8,14 @@ import org.springframework.context.annotation.Configuration;
 //@Conditional(RedisKeyLoadMatch.class)
 public class UserTagProviderCacheKeyBuilder extends RedisKeyBuilder {
 
-    private static final String USER_INFO_KEY = "userTag";
+    private static final String USER_TAG_KEY = "userTag";
+    private static final String USER_TAG_LOCK_KEY = "userTagLock";
 
     public String getModuleName() {
-        return USER_INFO_KEY;
+        return USER_TAG_KEY;
+    }
+
+    public String buildUserTagLockKey(Long userId) {
+        return this.getPrefix() + USER_TAG_LOCK_KEY + this.getSplitItem() + userId;
     }
 }
