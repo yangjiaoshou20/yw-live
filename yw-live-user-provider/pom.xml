@@ -136,7 +136,8 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>${docker-maven-plugin.version}</version>
                 <configuration>
-                    <dockerHost>tcp://192.168.211.132:2375</dockerHost>
+                    <certPath>${project.basedir}/src/main/resources/certs</certPath>
+                    <dockerHost>https://192.168.211.132:2376</dockerHost>
                     <images>
                         <image>
                             <name>${project.parent.artifactId}/${project.build.finalName}:${project.version}</name>
