@@ -1,57 +1,76 @@
 spring:
+  config:
+    import: nacos:${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+  profiles:
+    active: prod
   application:
     name: yw-live-user-provider
-  datasource:
-    driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
-    url: jdbc:shardingsphere:classpath:sharding.yaml
-    hikari:
-      pool-name: yw-live-user-pool
-      minimum-idle: 2
-      maximum-pool-size: 20
-      connection-timeout: 3000
-      max-lifetime: 60000
-  data:
-    redis:
-      cluster:
-        max-redirects: 3 # 最大重定向次数（默认5，建议3-5）
-        nodes:
-          - 192.168.211.132:6381
-          - 192.168.211.132:6382
-          - 192.168.211.132:6383
-          - 192.168.211.132:6384
-          - 192.168.211.132:6385
-          - 192.168.211.132:6386
-      lettuce:
-        pool:
-          min-idle: 2   #最小空闲连接
-          max-active: 16  #最大连接
-          max-idle: 32   #最大空闲连接
-dubbo:
-  application:
-    name: ${spring.application.name}
-    qos-enable: false
-  registry:
-    address: nacos://192.168.211.132:8848
-    parameters:
-      username: nacos
-      password: www.yyj.com
-      namespace: b7e7f031-ad7b-4a1f-98a7-a315bd105b26
-  protocol:
-    name: dubbo
-    port: 9091
-  consumer:
-    timeout: 10000
-  provider:
-    timeout: 30000
+  cloud:
+    nacos:
+      config:
+        group: DEFAULT_GROUP
+        username: nacos
+        password: www.yyj.com
+        file-extension: yaml
+        server-addr: 192.168.211.132:8848
+        namespace: b7e7f031-ad7b-4a1f-98a7-a315bd105b26
 
-yw:
-  mq:
-    producer:
-      name-srv-addr: 192.168.211.132:9876
-      producer-group: yw_user_producer
-    consumer:
-      name-srv-addr: 192.168.211.132:9876
-      consumer-group: yw_user_consumer
-
-mybatis-plus:
-  mapper-locations: classpath*:com/yw/live.user/**/*.xml
+#spring:
+#  profiles:
+#    active: prod
+#  application:
+#    name: yw-live-user-provider
+#  datasource:
+#    driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
+#    url: jdbc:shardingsphere:classpath:sharding.yaml
+#    hikari:
+#      pool-name: yw-live-user-pool
+#      minimum-idle: 2
+#      maximum-pool-size: 20
+#      connection-timeout: 3000
+#      max-lifetime: 60000
+#  data:
+#    redis:
+#      cluster:
+#        max-redirects: 3 # 最大重定向次数（默认5，建议3-5）
+#        nodes:
+#          - 192.168.211.132:6381
+#          - 192.168.211.132:6382
+#          - 192.168.211.132:6383
+#          - 192.168.211.132:6384
+#          - 192.168.211.132:6385
+#          - 192.168.211.132:6386
+#      lettuce:
+#        pool:
+#          min-idle: 2   #最小空闲连接
+#          max-active: 16  #最大连接
+#          max-idle: 32   #最大空闲连接
+#dubbo:
+#  application:
+#    name: ${spring.application.name}
+#    qos-enable: false
+#  registry:
+#    address: nacos://192.168.211.132:8848
+#    parameters:
+#      username: nacos
+#      password: www.yyj.com
+#      namespace: b7e7f031-ad7b-4a1f-98a7-a315bd105b26
+#  protocol:
+#    name: dubbo
+#    port: 9091
+#  consumer:
+#    timeout: 10000
+#  provider:
+#    timeout: 30000
+#
+#yw:
+#  mq:
+#    producer:
+#      name-srv-addr: 192.168.211.132:9876
+#      producer-group: yw_user_producer
+#    consumer:
+#      name-srv-addr: 192.168.211.132:9876
+#      consumer-group: yw_user_consumer
+#
+#mybatis-plus:
+#  mapper-locations: classpath*:com/yw/live.user/**/*.xml
