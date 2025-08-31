@@ -1,54 +1,54 @@
-dataSources:
-  yw-live-user-master:
-    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.211.132:16036/yw_live_user?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=utf8
-    username: root
-    password: www.yyj.com
-  yw-live-user-slave-01:
-    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.211.132:16037/yw_live_user?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=utf8
-    username: root
-    password: www.yyj.com
-rules:
-  - !READWRITE_SPLITTING
-    dataSources:
-      readwrite_ds:
-        staticStrategy:
-          writeDataSourceName: yw-live-user-master
-          readDataSourceNames:
-            - yw-live-user-slave-01
-        loadBalancerName: random
-    loadBalancers:
-      random:
-        type: RANDOM
-  - !SINGLE
-    defaultDataSource: readwrite_ds
-  - !SHARDING
-    tables:
-      t_user:
-        actualDataNodes: readwrite_ds.t_user_${(0..99).collect(){it.toString().padLeft(2,'0')}}
-        tableStrategy:
-          standard:
-            shardingColumn: user_id
-            shardingAlgorithmName: t_user-inline
-      t_user_tag:
-        actualDataNodes: readwrite_ds.t_user_tag_${(0..99).collect(){it.toString().padLeft(2,'0')}}
-        tableStrategy:
-          standard:
-            shardingColumn: user_id
-            shardingAlgorithmName: t_user_tag-inline
-
-    shardingAlgorithms:
-      t_user-inline:
-        type: INLINE
-        props:
-          algorithm-expression: t_user_${(user_id % 100).toString().padLeft(2,'0')}
-      t_user_tag-inline:
-        type: INLINE
-        props:
-          algorithm-expression: t_user_tag_${(user_id % 100).toString().padLeft(2,'0')}
-
-props:
-  sql-show: true  #打印sql
+#dataSources:
+#  yw-live-user-master:
+#    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    jdbcUrl: jdbc:mysql://192.168.211.132:16036/yw_live_user?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=utf8
+#    username: root
+#    password: www.yyj.com
+#  yw-live-user-slave-01:
+#    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    jdbcUrl: jdbc:mysql://192.168.211.132:16037/yw_live_user?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=utf8
+#    username: root
+#    password: www.yyj.com
+#rules:
+#  - !READWRITE_SPLITTING
+#    dataSources:
+#      readwrite_ds:
+#        staticStrategy:
+#          writeDataSourceName: yw-live-user-master
+#          readDataSourceNames:
+#            - yw-live-user-slave-01
+#        loadBalancerName: random
+#    loadBalancers:
+#      random:
+#        type: RANDOM
+#  - !SINGLE
+#    defaultDataSource: readwrite_ds
+#  - !SHARDING
+#    tables:
+#      t_user:
+#        actualDataNodes: readwrite_ds.t_user_${(0..99).collect(){it.toString().padLeft(2,'0')}}
+#        tableStrategy:
+#          standard:
+#            shardingColumn: user_id
+#            shardingAlgorithmName: t_user-inline
+#      t_user_tag:
+#        actualDataNodes: readwrite_ds.t_user_tag_${(0..99).collect(){it.toString().padLeft(2,'0')}}
+#        tableStrategy:
+#          standard:
+#            shardingColumn: user_id
+#            shardingAlgorithmName: t_user_tag-inline
+#
+#    shardingAlgorithms:
+#      t_user-inline:
+#        type: INLINE
+#        props:
+#          algorithm-expression: t_user_${(user_id % 100).toString().padLeft(2,'0')}
+#      t_user_tag-inline:
+#        type: INLINE
+#        props:
+#          algorithm-expression: t_user_tag_${(user_id % 100).toString().padLeft(2,'0')}
+#
+#props:
+#  sql-show: true  #打印sql
