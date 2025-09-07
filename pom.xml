@@ -25,6 +25,7 @@
         <module>yw-live-framework</module>
         <module>yw-live-id-generate-provider</module>
         <module>yw-live-id-generate-interface</module>
+        <module>yw-live-gateway</module>
     </modules>
 
     <properties>
@@ -36,6 +37,7 @@
         <sharding.jdbc.version>5.3.2</sharding.jdbc.version>
         <hessian.version>4.0.38</hessian.version>
         <jetty.version>9.4.28.v20200408</jetty.version>
+        <spring-cloud.version>2022.0.0</spring-cloud.version>
         <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
         <spring-cloud-starter-gateway.version>4.0.6</spring-cloud-starter-gateway.version>
         <spring-cloud-starter-loadbalancer.version>4.0.3</spring-cloud-starter-loadbalancer.version>
@@ -54,6 +56,13 @@
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
                 <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

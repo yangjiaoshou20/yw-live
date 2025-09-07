@@ -1,0 +1,24 @@
+server:
+  port: 8090
+spring:
+  config:
+    import: nacos:${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+  profiles:
+    active: prod
+  application:
+    name: yw-live-gateway
+  cloud:
+    nacos:
+      discovery:
+        username: nacos
+        password: www.yyj.com
+        server-addr: 192.168.211.132:8848
+        namespace: b7e7f031-ad7b-4a1f-98a7-a315bd105b26
+        group: DEFAULT_GROUP
+      config:
+        username: nacos
+        password: www.yyj.com
+        server-addr: 192.168.211.132:8848
+        namespace: b7e7f031-ad7b-4a1f-98a7-a315bd105b26
+        group: DEFAULT_GROUP
+        file-extension: yaml
